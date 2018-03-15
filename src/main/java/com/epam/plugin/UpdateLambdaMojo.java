@@ -44,7 +44,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- *  Maven plugin to update a AWS lambda.
+ *  Goal to update a AWS lambda.
  */
 @Mojo( name = "updateLambda", defaultPhase = LifecyclePhase.POST_INTEGRATION_TEST )
 public class UpdateLambdaMojo extends AbstractMojo

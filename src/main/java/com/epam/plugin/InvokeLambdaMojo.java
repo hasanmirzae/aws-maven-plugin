@@ -22,6 +22,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.lambda.AWSLambdaClientBuilder;
 import com.amazonaws.services.lambda.model.InvokeRequest;
+import com.amazonaws.util.IOUtils;
 import com.epam.plugin.exceptions.BadConfigurationException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -31,10 +32,14 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Objects;
 
 /**
- *  Maven plugin to invoke a AWS lambda.
+ *  Goal to invoke a AWS lambda.
  */
 @Mojo( name = "invokeLambda", defaultPhase = LifecyclePhase.POST_INTEGRATION_TEST )
 public class InvokeLambdaMojo extends AbstractMojo
@@ -76,8 +81,8 @@ public class InvokeLambdaMojo extends AbstractMojo
     /**
      * Function payload (json file).
      */
-    @Parameter( property = "profile", required = false)
-    private File payload;
+    @Parameter( property = "payloaJson", required = false)
+    private File payloadJson;
 
 
 
@@ -85,18 +90,19 @@ public class InvokeLambdaMojo extends AbstractMojo
         try {
 
             AWSLambdaClientBuilder.standard()
-                                  .withRegion(region)
-                                  .withCredentials(getCredentils())
-                                  .build().invoke(createRequest());
+                  .withRegion(region)
+                  .withCredentials(getCredentials())
+                  .build().invoke(createRequest());
         }catch (Exception e){
             logger.error(e);
             throw new MojoExecutionException(e.getMessage());
         }
     }
 
-    private InvokeRequest createRequest(){
-        InvokeRequest req = new InvokeRequest();
-        if (payload != null && !payload.isEmpty())
+    private InvokeRequest createRequest() throws IOException {
+        InvokeRequest req = new InvokeRequest().withFunctionName(lambdaName);
+
+        if (payloadJson != null)
             req.setPayload(getPayload());
 
         if (qualifier != null && !qualifier.isEmpty())
@@ -105,14 +111,15 @@ public class InvokeLambdaMojo extends AbstractMojo
         return req;
     }
 
-    private String getPayload() {
-        return "";
+    private ByteBuffer getPayload() throws IOException {
+        try(FileInputStream fis = new FileInputStream(payloadJson)){
+            return ByteBuffer.wrap(IOUtils.toByteArray(fis));
+        }
     }
 
-    private AWSCredentialsProvider getCredentils() throws BadConfigurationException {
+    private AWSCredentialsProvider getCredentials() throws BadConfigurationException {
         if (!Objects.isNull(accessKey)&&!Objects.isNull(secretKey)){
-           return new AWSStaticCredentialsProvider(
-                    new BasicAWSCredentials(accessKey, secretKey));
+           return new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey));
         }else{
             if(Objects.isNull(profile) || profile.isEmpty())
                 throw new BadConfigurationException("\nAWS credential profile not set.\n "
