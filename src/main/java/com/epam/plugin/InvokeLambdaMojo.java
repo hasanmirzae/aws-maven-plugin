@@ -22,6 +22,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.lambda.AWSLambdaClientBuilder;
 import com.amazonaws.services.lambda.model.InvokeRequest;
+import com.amazonaws.services.lambda.model.InvokeResult;
 import com.amazonaws.util.IOUtils;
 import com.epam.plugin.exceptions.BadConfigurationException;
 import org.apache.maven.plugin.AbstractMojo;
@@ -88,11 +89,14 @@ public class InvokeLambdaMojo extends AbstractMojo
 
     public void execute() throws MojoExecutionException{
         try {
+            logger.info(String.format("Invoking the lambda %s ...",lambdaName));
 
-            AWSLambdaClientBuilder.standard()
+            InvokeResult result = AWSLambdaClientBuilder.standard()
                   .withRegion(region)
                   .withCredentials(getCredentials())
                   .build().invoke(createRequest());
+
+            logger.info("Invocation result: "+result.toString());
         }catch (Exception e){
             logger.error(e);
             throw new MojoExecutionException(e.getMessage());
@@ -112,12 +116,14 @@ public class InvokeLambdaMojo extends AbstractMojo
     }
 
     private ByteBuffer getPayload() throws IOException {
+        logger.info("Reading payload ...");
         try(FileInputStream fis = new FileInputStream(payloadJson)){
             return ByteBuffer.wrap(IOUtils.toByteArray(fis));
         }
     }
 
     private AWSCredentialsProvider getCredentials() throws BadConfigurationException {
+        logger.debug("Getting credentials ...");
         if (!Objects.isNull(accessKey)&&!Objects.isNull(secretKey)){
            return new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey));
         }else{

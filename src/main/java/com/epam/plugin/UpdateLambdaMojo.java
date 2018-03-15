@@ -22,10 +22,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.lambda.AWSLambda;
 import com.amazonaws.services.lambda.AWSLambdaClientBuilder;
-import com.amazonaws.services.lambda.model.Environment;
-import com.amazonaws.services.lambda.model.UpdateAliasRequest;
-import com.amazonaws.services.lambda.model.UpdateFunctionCodeRequest;
-import com.amazonaws.services.lambda.model.UpdateFunctionConfigurationRequest;
+import com.amazonaws.services.lambda.model.*;
 import com.amazonaws.util.IOUtils;
 import com.epam.plugin.exceptions.BadConfigurationException;
 import org.apache.maven.plugin.AbstractMojo;
@@ -123,6 +120,7 @@ public class UpdateLambdaMojo extends AbstractMojo
     }
 
     private AWSCredentialsProvider getCredentils() throws BadConfigurationException {
+        logger.debug("Getting credentials ...");
         if (!Objects.isNull(accessKey)&&!Objects.isNull(secretKey)){
            return new AWSStaticCredentialsProvider(
                     new BasicAWSCredentials(accessKey, secretKey));
@@ -137,12 +135,12 @@ public class UpdateLambdaMojo extends AbstractMojo
     private void updateAlias(String version) {
         if (Objects.isNull(alias) || alias.isEmpty())
             return;
-        lambda.updateAlias(new UpdateAliasRequest()
+        UpdateAliasResult result = lambda.updateAlias(new UpdateAliasRequest()
                 .withName(alias)
                 .withFunctionName(lambdaName)
                 .withFunctionVersion(version)
                 .withDescription(getDescription()));
-        logger.info("Updated alias : " + alias);
+        logger.info(result.toString());
 
     }
 
