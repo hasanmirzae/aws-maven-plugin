@@ -2,3 +2,5 @@ target
 .idea
 aws-maven-plugin.iml
 src
+pom.xml
+
