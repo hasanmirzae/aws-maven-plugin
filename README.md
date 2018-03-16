@@ -30,7 +30,7 @@
 
 ```bash
 mvn install:install-file -DgroupId=YOUR_GROUP -DartifactId=YOUR_ARTIFACT -Dversion=YOUR_VERSION -Dfile=YOUR_JAR_FILE -Dpackaging=jar -DgeneratePom=false -DpomFile=pom.xml -DlocalRepositoryPath=.  -DcreateChecksum=true
-mvn install:install-file -DgroupId=epam.com -DartifactId=aws-maven-plugin -Dversion=1.0.0-SNAPSHOT -Dfile=target/aws-maven-plugin-1.0.0-SNAPSHOT.jar -Dpackaging=jar -DgeneratePom=false -DpomFile=pom.xml -DlocalRepositoryPath=repository  -DcreateChecksum=true
+mvn install:install-file -DgroupId=com.epam -DartifactId=aws-maven-plugin -Dversion=1.0.0-SNAPSHOT -Dfile=target/aws-maven-plugin-1.0.0-SNAPSHOT.jar -Dpackaging=jar -DgeneratePom=false -DpomFile=pom.xml -DlocalRepositoryPath=repository  -DcreateChecksum=true
 ```
 
 `YOUR_JAR_FILE` should point to an existent jar file, this is why it's best to create your repository branch in a different folder, so you can reference the existing jar in `/your/project/path/target/artifact-x.y.z.jar`
