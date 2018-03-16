@@ -43,5 +43,5 @@ mvn install:install-file -DgroupId=com.epam -DartifactId=aws-maven-plugin -Dvers
 
 ## Reference your jar from a different project
 
-The repository url you just created is https://raw.github.com/YOUR_ORGANIZATION/YOUR_ARTIFACT/repository/
-or https://github.com/YOUR_ORGANIZATION/YOUR_ARTIFACT/raw/repository/
+The repository url you just created is https://raw.github.com/YOUR_ORGANIZATION/YOUR_ARTIFACT/BRANCH_NAME/repository/
+https://raw.github.com/hasanmirzae/aws-maven-plugin/mvn-repo/repository
