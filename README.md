@@ -1,5 +1,8 @@
 # aws-maven-plugin
 
+# Usage: 
+https://github.com/hasanmirzae/aws-maven-plugin/wiki
+
 ## How to create a maven repository in github
 
 ####  1 - build the plugin project to have the latest jar
