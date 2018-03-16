@@ -45,3 +45,20 @@ mvn install:install-file -DgroupId=com.epam -DartifactId=aws-maven-plugin -Dvers
 
 The repository url you just created is https://raw.github.com/YOUR_ORGANIZATION/YOUR_ARTIFACT/BRANCH_NAME/repository/
 https://raw.github.com/hasanmirzae/aws-maven-plugin/mvn-repo/repository
+
+## Example of adding repository in pom.xml
+```xml
+	<pluginRepositories>
+		<pluginRepository>
+			<id>hasanmirzae-github-aws-maven-plugin-repo</id>
+			<url>https://raw.github.com/hasanmirzae/aws-maven-plugin/mvn-repo/repository</url>
+			<layout>default</layout>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
+```
