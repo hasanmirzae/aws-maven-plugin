@@ -34,7 +34,6 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Objects;
@@ -45,6 +44,7 @@ import java.util.Objects;
 @Mojo( name = "invokeLambda", defaultPhase = LifecyclePhase.POST_INTEGRATION_TEST )
 public class InvokeLambdaMojo extends AbstractMojo
 {
+    private static final Integer STATUS_SUCCESS = 200;
     private final Log logger = getLog();
     /**
      * Function name.
@@ -89,17 +89,23 @@ public class InvokeLambdaMojo extends AbstractMojo
 
     public void execute() throws MojoExecutionException{
         try {
-            logger.info(String.format("Invoking the lambda %s ...",lambdaName));
+            logger.info(String.format("Invoking %s ...",lambdaName));
 
             InvokeResult result = AWSLambdaClientBuilder.standard()
                   .withRegion(region)
                   .withCredentials(getCredentials())
                   .build().invoke(createRequest());
-
-            logger.info("Invocation result: "+result.toString());
+            handleResult(result);
         }catch (Exception e){
             logger.error(e);
             throw new MojoExecutionException(e.getMessage());
+        }
+    }
+
+    private void handleResult(InvokeResult result) throws MojoExecutionException {
+        logger.info("Invocation result: "+result.toString());
+        if (!STATUS_SUCCESS.equals(result.getStatusCode())){
+            throw new MojoExecutionException("FunctionError: " + result.getFunctionError());
         }
     }
 
