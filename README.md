@@ -1,52 +1,38 @@
 # aws-maven-plugin
 
-# How to create a maven repository in github
+## How to create a maven repository in github
 
-## Clone the project in a separate folder
+####  1 - build the plugin project to have the latest jar
 
-(note: replace `ORGANIZATION` and `PROJECT`)
+####  2 - create a directory (here named repository)
 
-`git clone git clone git@github.com:ORGANIZATION/PROJECT.git my-repository`
+####  3 - add this folder into .gitignore
 
-## Cd into it
+#### 4 - Install the jar in that directory (repository)
 
-`cd my-repository`
-
-## Create a new branch (here named repository)
-
-`git branch repository`
-
-## Switch to that branch
-
-`git checkout repository`
-
-## Remove all files
-
-`rm -rf file1 file2 file3 .. etc`
-
-## Install the jar in that directory
-
-(note: replace `YOUR_GROUP`, `YOUR_ARTIFACT`, `YOUR_VERSION` and `YOUR_JAR_FILE`)
-
-```bash
-mvn install:install-file -DgroupId=YOUR_GROUP -DartifactId=YOUR_ARTIFACT -Dversion=YOUR_VERSION -Dfile=YOUR_JAR_FILE -Dpackaging=jar -DgeneratePom=false -DpomFile=pom.xml -DlocalRepositoryPath=.  -DcreateChecksum=true
+`
 mvn install:install-file -DgroupId=com.epam -DartifactId=aws-maven-plugin -Dversion=1.0.0-SNAPSHOT -Dfile=target/aws-maven-plugin-1.0.0-SNAPSHOT.jar -Dpackaging=jar -DgeneratePom=false -DpomFile=pom.xml -DlocalRepositoryPath=repository  -DcreateChecksum=true
-```
+`
 
-`YOUR_JAR_FILE` should point to an existent jar file, this is why it's best to create your repository branch in a different folder, so you can reference the existing jar in `/your/project/path/target/artifact-x.y.z.jar`
+####  5 - Create a new branch (here named mvn-repo) and switch into the new branch
 
-## Add all generated files, commit and push
+`git checkout -b mvn-repo`
 
-`git add -A . && git commit -m "released version X.Y.Z"`
+####  6 - remove src, pom.xml, ... except than repository
 
-`git push origin repository`
+####  7 - commit the changes on branch mvn-repo and push to origin
 
-## Reference your jar from a different project
+`git add . && git commit -m "release x.y.z"`
 
-The repository url you just created is https://raw.github.com/YOUR_ORGANIZATION/YOUR_ARTIFACT/BRANCH_NAME/repository/
+`git push origin mvn-repo`
+
+###  Repository url
+
+`
+https://raw.github.com/GITHUB_USERNAME/GITHUB_REPOSITORY/BRANCH_NAME/repository/
 https://raw.github.com/hasanmirzae/aws-maven-plugin/mvn-repo/repository
-
-## Example of adding repository in pom.xml
+`
+####  Example of adding repository in pom.xml
 ```xml
 	<pluginRepositories>
 		<pluginRepository>
