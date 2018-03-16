@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>epam.com</groupId>
+  <artifactId>aws-maven-plugin</artifactId>
+  <versioning>
+    <versions>
+      <version>1.0.0-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20180316075409</lastUpdated>
+  </versioning>
+</metadata>
