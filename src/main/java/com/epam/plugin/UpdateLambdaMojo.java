@@ -102,6 +102,7 @@ public class UpdateLambdaMojo extends AbstractMojo
 
     public void execute() throws MojoExecutionException{
         try {
+            logger.info(String.format("Updating %s ...",lambdaName));
             lambda = createLambdaClient();
             String revisionId = lambda.updateFunctionConfiguration(createUpdateConfiguration()).getRevisionId();
             logger.info("New revisionId: " + revisionId);
@@ -124,7 +125,6 @@ public class UpdateLambdaMojo extends AbstractMojo
     }
 
     private AWSCredentialsProvider getCredentils() throws BadConfigurationException {
-        logger.debug("Getting credentials ...");
         if (!Objects.isNull(accessKey)&&!Objects.isNull(secretKey)){
            return new AWSStaticCredentialsProvider(
                     new BasicAWSCredentials(accessKey, secretKey));
