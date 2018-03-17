@@ -144,7 +144,7 @@ public class UpdateLambdaMojo extends AbstractMojo
                 .withFunctionName(lambdaName)
                 .withFunctionVersion(version)
                 .withDescription(getDescription()));
-        logger.info(result.toString());
+        logger.info("Update result:" + result.toString());
 
     }
 
