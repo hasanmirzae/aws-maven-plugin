@@ -3,4 +3,4 @@ target
 aws-maven-plugin.iml
 src
 pom.xml
-
+deploy-to-github.sh
